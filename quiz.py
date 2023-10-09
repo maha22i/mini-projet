@@ -111,6 +111,12 @@ def displayNextQuestion():
         index = 0
         question_label['bg'] = 'grey'
         button_next['text'] = 'Next'
+        
+
+        # Démarrer le thread du chronomètre
+        timer_thread = threading.Thread(target=update_timer)
+        timer_thread.daemon = True  # Le thread du chronomètre s'exécutera en arrière-plan
+        timer_thread.start()
 
     if index == len(options):
        question_label['text'] = str(correct) + " / " + str(len(options))
@@ -143,6 +149,18 @@ def displayNextQuestion():
 
 
 
+import threading
+time_elapsed = 0
+def update_timer():
+    global time_elapsed
+    while True:
+        time_elapsed += 1
+        timer_label.config(text=f"Temps écoulé : {time_elapsed} secondes")
+        root.update()
+        time.sleep(1)
+
+timer_label = tk.Label(frame, text="", font=('Verdana', 20), bg='#fff')
+timer_label.grid(row=5, column=0)
 
 
 displayNextQuestion()
