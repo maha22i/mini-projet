@@ -44,10 +44,21 @@ options = [['4','5','6','7','2'],['Kenya','Maroc','Tanzanie','Algerie','Djibouti
            
            ]
 
+correct = 0  # Variable globale pour compter les réponses correctes
+time_elapsed = 0  # Variable globale pour le temps écoulé
 
-frame = tk.Frame(root, padx=10, pady=10,bg='#fff')
-question_label = tk.Label(frame,height=5, width=28,bg='grey',fg="#fff", 
-                          font=('Verdana', 20),wraplength=500)
+# Fonction pour mettre à jour le chronomètre
+def update_timer():
+    global time_elapsed
+    while True:
+        time_elapsed += 1
+        timer_label.config(text=f"Temps écoulé : {time_elapsed} secondes")
+        root.update()
+        time.sleep(1)
+
+
+
+
 
 
 v1 = StringVar(frame)
@@ -112,6 +123,14 @@ def displayNextQuestion():
         question_label['bg'] = 'grey'
         button_next['text'] = 'Next'
         
+        # Créez l'étiquette du chronomètre à l'intérieur de cette condition
+        timer_label = tk.Label(frame, text="", font=('Verdana', 20), bg='#fff')
+        timer_label.grid(row=5, column=0)
+
+frame = tk.Frame(root, padx=10, pady=10,bg='#fff')
+question_label = tk.Label(frame,height=5, width=28,bg='grey',fg="#fff", 
+                          font=('Verdana', 20),wraplength=500)
+
 
         # Démarrer le thread du chronomètre
         timer_thread = threading.Thread(target=update_timer)
@@ -149,18 +168,6 @@ def displayNextQuestion():
 
 
 
-import threading
-time_elapsed = 0
-def update_timer():
-    global time_elapsed
-    while True:
-        time_elapsed += 1
-        timer_label.config(text=f"Temps écoulé : {time_elapsed} secondes")
-        root.update()
-        time.sleep(1)
-
-timer_label = tk.Label(frame, text="", font=('Verdana', 20), bg='#fff')
-timer_label.grid(row=5, column=0)
 
 
 displayNextQuestion()
