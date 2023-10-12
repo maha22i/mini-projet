@@ -114,7 +114,7 @@ class QuizCapitales:
             if self.score < 8 :
                 messagebox.showinfo("Score","Mauvais score vous n'avez pas réussi le test ")
             else :
-                messagebox.showinfo("Score","Bravo ! Vous êtes bien présent dans l'univers du football !!")
+                messagebox.showinfo("Score","Bravo ! Vous êtes bien présent dans l'univers des capitaless !!")
 
 
     def verifier_reponse(self, choix):
