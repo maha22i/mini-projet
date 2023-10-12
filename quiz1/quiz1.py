@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import quiz1
-
+from quiz_foot import QuizFoot
 
 # Créez la fenêtre principale
 root = tk.Tk()
@@ -42,10 +42,8 @@ def afficher_fenetre_quiz():
     # Fonctions pour gérer les actions lorsque les boutons sont cliqués
     def foot():
         label.config(text="Vous avez choisi de jouer sur le football !!")
-        afficher_bouton_confirmation("le football")
-        #if afficher_bouton_confirmation("le football")==1:
-
-
+        if afficher_bouton_confirmation("le football")==1:
+            foot=QuizFoot(fenetre_quiz)
 
     # Créez un label pour afficher le résultat des sélections
     label = tk.Label(fenetre_quiz, text="Faites un choix !!", font=(20))
