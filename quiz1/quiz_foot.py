@@ -2,13 +2,12 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import StringVar
 from tkinter import messagebox
-import quiz1
 
 class QuizFoot:
     def __init__(self, root):
         self.root = root
         self.current_question = 0
-        self.score = 0
+        self.score = 0             # Initialiser le score à 0
 
         # Fermez la fenêtre des thèmes
         self.root.destroy()
@@ -78,71 +77,57 @@ class QuizFoot:
         ["Miroslav Klose","Cristiano Ronaldo","Lionel Messi","Diegp Maradona"]
         ]
 
-        self.frame = tk.Frame(root, padx=10, pady=10,bg='#fff')
+        self.questions = questions_football
+        self.reponses = reponses_football
+        self.choix_reponses = choix_reponses_football
+
 
         # Créez un label pour afficher la question
-        self.question_label = tk.Label(self.frame,height=5, width=28,bg='grey',fg="#fff", 
-                          font=('Verdana', 20),wraplength=500)
-        #self.question_label.pack(pady=10)
+        self.question_label = tk.Label(quizfootball, text="")
+        self.question_label.pack(pady=10)
 
-        # Créez un choix de réponses pour l'utilisateur
-        v1 = StringVar(self.frame)
-        v2 = StringVar(self.frame)
-        v3 = StringVar(self.frame)
-        v4 = StringVar(self.frame)
+       # Créez des boutons pour les choix de réponses
+        self.buttons = []
 
-        option1 = tk.Radiobutton(self.frame, bg="#fff", variable=v1, font=('Verdana', 20),
-                         command = lambda : checkAnswer(option1))
-        option2 = tk.Radiobutton(self.frame, bg="#fff", variable=v2, font=('Verdana', 20), 
-                         command = lambda : checkAnswer(option2))
-        option3 = tk.Radiobutton(self.frame, bg="#fff", variable=v3, font=('Verdana', 20), 
-                         command = lambda : checkAnswer(option3))
-        option4 = tk.Radiobutton(self.frame, bg="#fff", variable=v4, font=('Verdana', 20), 
-                         command = lambda : checkAnswer(option4))
+        for i in range(4):
+            button = tk.Button(quizfootball, text="", command=lambda i=i: self.verifier_reponse(i))
+            button.pack(pady=5)
+            self.buttons.append(button)
         
-        # Créez un bouton pour passer à la question suivante
+        # Bouton pour passer à la question suivante
         self.suivant_button = tk.Button(quizfootball, text="Question suivante", command=self.question_suivante)
         self.suivant_button.pack()
 
-        self.frame.pack(fill="both", expand="true")
-        self.question_label.grid(row=0, column=0)
+        # Initialiser le quiz
+        self.question_suivante()
 
-        option1.grid(sticky= 'W', row=1, column=0)
-        option2.grid(sticky= 'W', row=2, column=0)
-        option3.grid(sticky= 'W', row=3, column=0)
-        option4.grid(sticky= 'W', row=4, column=0)
+        #Execution de la boucle pour la fenêtre du quiz du foot
+        quizfootball.mainloop()
 
-        self.suivant_button.grid(row=6, column=0)
-    
-        # create a function to disable radiobuttons
-        def disableButtons(state):
-            option1['state'] = state
-            option2['state'] = state
-            option3['state'] = state
-            option4['state'] = state    
-    
-    
-    
-        # create a function to check the selected answer
-        def checkAnswer(radio):
-            # the 4th item is the correct answer
-            # we will check the user selected answer with the 4th item
-            if radio['text'] == self.choix_reponses_football[self.current_question][0]:
-                self.score +=1
-
-            self.current_question +=1
-            disableButtons('disable')
 
 
     def question_suivante(self):
-        if self.current_question < len(self.questions_football):
-            self.question_label.config(text=self.questions_football[self.current_question])
+        if self.current_question < len(self.questions):
+            self.question_label.config(text=self.questions[self.current_question])
+            for i in range(4):
+                self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
             self.current_question += 1
         else:
-            messagebox.showinfo("Fin du quiz", "Vous avez répondu à toutes les questions!")
-            print("Votre score est de "+self.score)
+            messagebox.showinfo("Fin du quiz", "Quiz terminé. Score final : "+self.score+" points")
             if self.score < 8 :
                 messagebox.showinfo("Score","Mauvais score vous n'avez pas réussi le test ")
             else :
                 messagebox.showinfo("Score","Bravo ! Vous êtes bien présent dans l'univers du football !!")
-    
+
+
+    def verifier_reponse(self, choix):
+        if self.current_question <= len(self.reponses):
+            reponse_utilisateur = self.choix_reponses[self.current_question - 1][choix]
+            reponse_correcte = self.reponses[self.current_question - 1]
+            if reponse_utilisateur.lower() == reponse_correcte.lower():
+                self.score += 1
+                messagebox.showinfo("Bonne réponse", "C'est correct!")
+            else:
+                messagebox.showerror("Mauvaise réponse", "La réponse correcte était : "+reponse_correcte+" .")
+        else:
+            messagebox.showerror("Toutes les questions ont déjà été posées.")
