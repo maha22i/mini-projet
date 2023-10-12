@@ -56,7 +56,7 @@ class QuizCapitales:
             "Oslo",
             "Noursoultan",  # Anciennement Astana
             "Hanoï",
-            "Luxembourg (Ville)"
+            "Luxembourg"
         ]
 
         choix_reponses_capitales = [
