@@ -12,7 +12,7 @@ class QuizFoot:
         # Fermez la fenêtre des thèmes
         self.root.destroy()
 
-        # Créez la fenêtre quizz_foot
+        # Créez la fenêtre quiz_foot
         quizfootball = tk.Tk()
         quizfootball.title("Quiz de football")
         quizfootball.geometry("800x500")

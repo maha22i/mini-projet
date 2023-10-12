@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 import quiz1
 from quiz_foot import QuizFoot
+from quiz_capitales import QuizCapitales
 
 # Créez la fenêtre principale
 root = tk.Tk()
@@ -45,6 +46,11 @@ def afficher_fenetre_quiz():
         if afficher_bouton_confirmation("le football")==1:
             foot=QuizFoot(fenetre_quiz)
 
+    def capitales():
+        label.config(text="Vous avez choisi de jouer sur les capitales !!")
+        if afficher_bouton_confirmation("les capitales")==1 :
+            capi=QuizCapitales(fenetre_quiz)
+
     # Créez un label pour afficher le résultat des sélections
     label = tk.Label(fenetre_quiz, text="Faites un choix !!", font=(20))
     label.pack(pady=10)
@@ -54,8 +60,8 @@ def afficher_fenetre_quiz():
     button_frame.pack(expand=True)
 
     # Créez les boutons pour les différentes options
-    #button1 = tk.Button(button_frame, text="Capitales",width=20, height=2, command=quiz1.quiz_capitales.capitales(label))
-    #button1.pack(side="left", padx=5, pady=5)
+    button1 = tk.Button(button_frame, text="Capitales",width=20, height=2, command=capitales)
+    button1.pack(side="left", padx=20, pady=20)
 
     button2 = tk.Button(button_frame, text="Football",width=20, height=2, command=foot)
     button2.pack(side="left", padx=20, pady=20)
