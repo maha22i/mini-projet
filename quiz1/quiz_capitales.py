@@ -12,7 +12,7 @@ class QuizCapitales:
         # Fermez la fenêtre des thèmes
         self.root.destroy()
 
-        # Créez la fenêtre quiz_foot
+        # Créez la fenêtre quiz_capitales
         quizcapitales = tk.Tk()
         quizcapitales.title("Quiz sur les capitales")
         quizcapitales.geometry("800x500")

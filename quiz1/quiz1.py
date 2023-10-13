@@ -5,6 +5,7 @@ import quiz1
 from quiz_foot import QuizFoot
 from quiz_capitales import QuizCapitales
 from quiz_animaux import QuizAnimaux
+from quiz_histoire_france import QuizHistoire
 
 # Créez la fenêtre principale
 root = tk.Tk()
@@ -57,6 +58,11 @@ def afficher_fenetre_quiz():
         if afficher_bouton_confirmation("les animaux")==1  :
             QuizAnimaux(fenetre_quiz)
 
+    def his_Fr():
+        label.config(text="Vous avez choisi de jouer sur l'histoire de France !!")
+        if afficher_bouton_confirmation("l'histoire de France") :
+            QuizHistoire(fenetre_quiz)
+
     # Créez un label pour afficher le résultat des sélections
     label = tk.Label(fenetre_quiz, text="Faites un choix !!", font=(20))
     label.pack(pady=10)
@@ -72,8 +78,8 @@ def afficher_fenetre_quiz():
     button2 = tk.Button(button_frame, text="Football",width=20, height=2, command=foot)
     button2.pack(side="left", padx=20, pady=20)
     
-    #button3 = tk.Button(button_frame, text="Histoire française",width=20, height=2, command=quiz1.quiz_histoire_france.his_Fr(label))
-    #button3.pack(side="left", padx=20, pady=20)
+    button3 = tk.Button(button_frame, text="Histoire française",width=20, height=2, command=his_Fr)
+    button3.pack(side="left", padx=20, pady=20)
 
     button4 = tk.Button(button_frame, text="Animaux",width=20, height=2, command=animaux)
     button4.pack(side="left", padx=20, pady=20)
@@ -94,12 +100,6 @@ commencer_button = tk.Button(root, text="Commencer", width=20, height=3, command
 
 # Placez le bouton au milieu en bas de la fenêtre principale
 commencer_button.pack(side=tk.BOTTOM, padx=10, pady=50)
-
-
-
-
-
-
 
 
 root.mainloop()

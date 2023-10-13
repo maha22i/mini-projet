@@ -12,7 +12,7 @@ class QuizAnimaux :
         # Fermez la fenêtre des thèmes
         self.root.destroy()
 
-        # Créez la fenêtre quiz_foot
+        # Créez la fenêtre quiz_animaux
         quizanimaux = tk.Tk()
         quizanimaux.title("Quiz sur les animaux")
         quizanimaux.geometry("800x500")
