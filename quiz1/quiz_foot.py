@@ -106,7 +106,6 @@ class QuizFoot:
         self.quizfootball.mainloop()
 
 
-    #button.config(text="terminer le test")
     def question_suivante(self):
         if self.current_question < len(self.questions):
             self.question_label.config(text=self.questions[self.current_question])

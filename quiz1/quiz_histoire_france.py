@@ -129,7 +129,7 @@ class QuizHistoire :
         #fermeture de la fenêtre du quiz
         self.quizhistoire.destroy()
 
-        # Créez une nouvelle fenêtre pour le quiz
+        # Créez une nouvelle fenêtre pour les resultats
         fenetre_res = tk.Tk()
         fenetre_res.title("Résultats")
         fenetre_res.geometry("800x500")
@@ -140,7 +140,7 @@ class QuizHistoire :
         background_label = tk.Label(fenetre_res, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # Créez un label pour annoncer le résultat du quizz
+        # Créez un label pour annoncer le résultat du quiz
         label = tk.Label(fenetre_res, text="Voici votre résultat", font=(20))
         label.place(x=400,y=100,anchor="center")
 
