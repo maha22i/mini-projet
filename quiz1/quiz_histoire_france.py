@@ -7,22 +7,33 @@ class QuizHistoire :
     def __init__(self, root):
         self.root = root
         self.current_question = 0
-        self.score = 0             # Initialiser le score à 0
+        self.score = 0
 
-        # Fermez la fenêtre des thèmes
         self.root.destroy()
 
-        # Créez la fenêtre quiz_hsitoire
         self.quizhistoire = tk.Tk()
         self.quizhistoire.title("Quiz d'histoire de France")
         self.quizhistoire.geometry("800x500")
 
-        # Chargez l'image à afficher en arrière-plan
-        img_quiz=Image.open('fond_ecran_quiz.gif')
+        # Create a StringVar to display the timer
+
+       
+
+        # Start the timer
+
+        # Load the image to display as a background
+        img_quiz = Image.open('fond_ecran_quiz.gif')
         photo_quiz = ImageTk.PhotoImage(img_quiz)
-        # Créez un widget Label pour afficher l'image en arrière-plan
         background_label = tk.Label(self.quizhistoire, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
+ # Create a label to display the timer
+        self.timer_seconds = 5  # Set the timer to 60 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+
+        self.timer_label = tk.Label(self.quizhistoire, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()
 
         questions_histoire_france = [
             "Qui était le roi de France pendant la Révolution française ?",
@@ -105,6 +116,8 @@ class QuizHistoire :
 
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            # self.quizhistoire.quit()
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
@@ -122,6 +135,19 @@ class QuizHistoire :
                 messagebox.showinfo("Bonne réponse", "C'est correct!")
             else:
                 messagebox.showerror("Mauvaise réponse", "La réponse correcte était : "+reponse_correcte+" .")
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizhistoire.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+
+            response = messagebox.showinfo("Time's up!", "Your time is up.")
+            if response == "ok":
+                self.question_suivante() 
+              
+              
+                self.update_timer()
     
     def terminer_quiz(self):
         #fermeture de la fenêtre du quiz
@@ -156,3 +182,7 @@ class QuizHistoire :
 
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = QuizHistoire(root)
+    root.mainloop()

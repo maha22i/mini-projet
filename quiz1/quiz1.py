@@ -14,16 +14,17 @@ root.title("MrQuiz")
 #Taille de la fenetre d'acceuil
 root.geometry("800x500")
 
+# Créez le titre en haut et centre
+bienvenu_label = tk.Label(root, text="Bienvenu sur MrQuiz !", font=("Helvetica", 100, "bold"), foreground="black")
+bienvenu_label.pack(side=tk.TOP, pady=0)  # Placez le titre en haut avec un espacement en bas
+
+
 # Chargez l'image à afficher en arrière-plan
 img_acceuil=Image.open('fond_ecran_acceuil.gif')
 photo_acceuil = ImageTk.PhotoImage(img_acceuil)
 # Créez un widget Label pour afficher l'image en arrière-plan
 background_label = tk.Label(root, image=photo_acceuil)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
-
-# Créez le titre en haut et centre
-bienvenu_label = tk.Label(root, text="Bienvenu sur MrQuiz !", font=(20))
-bienvenu_label.pack(side=tk.TOP, pady=10)  # Placez le titre en haut avec un espacement en bas
 
 # Fonction pour le choix du theme du quiz
 def afficher_fenetre_quiz():

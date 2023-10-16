@@ -9,6 +9,9 @@ class QuizAnimaux :
         self.current_question = 0
         self.score = 0             # Initialiser le score à 0
 
+
+        # Initialize timer
+
         # Fermez la fenêtre des thèmes
         self.root.destroy()
 
@@ -24,6 +27,13 @@ class QuizAnimaux :
         background_label = tk.Label(self.quizanimaux, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+        self.timer_seconds = 15  # Set the timer to 60 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+
+        self.timer_label = tk.Label(self.quizanimaux, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()   
         questions_animaux = [
             "Quel est le plus grand animal terrestre ?",
             "Quel animal est souvent appelé 'le roi de la jungle' ?",
@@ -97,6 +107,8 @@ class QuizAnimaux :
         self.suivant_button = tk.Button(self.quizanimaux, text="Question suivante", command=self.question_suivante)
         self.suivant_button.pack()
 
+
+
         # Initialiser le quiz
         self.question_suivante()
 
@@ -108,6 +120,8 @@ class QuizAnimaux :
 
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            # self.quizhistoire.quit()
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
@@ -125,7 +139,18 @@ class QuizAnimaux :
                 messagebox.showinfo("Bonne réponse", "C'est correct!")
             else:
                 messagebox.showerror("Mauvaise réponse", "La réponse correcte était : "+reponse_correcte+" .")
-
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizanimaux.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Your time is up.")
+            if response == "ok":
+                self.question_suivante() 
+                self.timer_seconds=15 # Call your custom function            # self.quizhistoire.quit()
+                self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+                self.update_timer()
     def terminer_quiz(self):
         #fermeture de la fenêtre du quiz
         self.quizanimaux.destroy()
@@ -159,3 +184,4 @@ class QuizAnimaux :
 
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop() 
+   

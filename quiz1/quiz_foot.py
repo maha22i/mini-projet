@@ -23,7 +23,13 @@ class QuizFoot:
         # Créez un widget Label pour afficher l'image en arrière-plan
         background_label = tk.Label(self.quizfootball, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
-    
+        self.timer_seconds = 15  # Set the timer to 60 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+
+        self.timer_label = tk.Label(self.quizfootball, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()   
         questions_football = [
             "Qui est généralement considéré comme le meilleur joueur de football de tous les temps ?",
             "Quelle équipe nationale a remporté le plus de Coupes du Monde de la FIFA ?",
@@ -108,13 +114,25 @@ class QuizFoot:
     #button.config(text="terminer le test")
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            # self.quizhistoire.quit()
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
             self.current_question += 1
         else:
             self.suivant_button.config(text="Terminer le quiz",command=self.terminer_quiz)
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizfootball.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
+            if response == "ok":
+                self.question_suivante() 
 
+                self.update_timer()
 
     def verifier_reponse(self, choix):
         if self.current_question <= len(self.reponses):
