@@ -94,6 +94,7 @@ def afficher_fenetre_quiz():
     # Exécutez la boucle principale pour la fenêtre du quiz
     fenetre_quiz.mainloop()
 
+
 # Créez le bouton "Commencer" et liez-le à la fonction afficher_fenetre_quiz
 commencer_button = tk.Button(root, text="Commencer", width=20, height=3, command=afficher_fenetre_quiz)
 
