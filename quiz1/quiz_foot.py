@@ -136,7 +136,7 @@ class QuizFoot:
 
         # Créez une nouvelle fenêtre pour le quiz
         fenetre_res = tk.Tk()
-        fenetre_res.title("Résultas")
+        fenetre_res.title("Résultats")
         fenetre_res.geometry("800x500")
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')

@@ -6,6 +6,7 @@ from quiz_foot import QuizFoot
 from quiz_capitales import QuizCapitales
 from quiz_animaux import QuizAnimaux
 from quiz_histoire_france import QuizHistoire
+from perso import Perso
 
 # Créez la fenêtre principale
 root = tk.Tk()
@@ -62,6 +63,11 @@ def afficher_fenetre_quiz():
         if afficher_bouton_confirmation("l'histoire de France") :
             QuizHistoire(fenetre_quiz)
 
+    def perso():
+        label.config(text="Vous avez choisi de créer votre quiz !!")
+        if afficher_bouton_confirmation("un choix perso") == 1:
+            Perso(fenetre_quiz)
+
     # Créez un label pour afficher le résultat des sélections
     label = tk.Label(fenetre_quiz, text="Faites un choix !!", font=(20))
     label.pack(pady=10)
@@ -82,6 +88,12 @@ def afficher_fenetre_quiz():
 
     button4 = tk.Button(button_frame, text="Animaux",width=20, height=2, command=animaux)
     button4.pack(side="left", padx=20, pady=20)
+
+    # Créez le bouton "Commencer" et liez-le à la fonction afficher_fenetre_quiz
+    perso_button = tk.Button(fenetre_quiz, text="Personaliser", width=20, height=3, command=perso)
+
+    # Placez le bouton au milieu en bas de la fenêtre principale
+    perso_button.pack(side=tk.BOTTOM, padx=10, pady=50)
 
     def afficher_bouton_confirmation(message):
         confirmation = messagebox.askyesno("Confirmation", "Voulez-vous confirmer votre choix pour un quiz sur "+message+" ?")
