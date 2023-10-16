@@ -145,7 +145,7 @@ class QuizAnimaux :
             self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.quizanimaux.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
         else:
-            response = messagebox.showinfo("Time's up!", "Your time is up.")
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
             if response == "ok":
                 self.question_suivante() 
                 self.timer_seconds=15 # Call your custom function            # self.quizhistoire.quit()

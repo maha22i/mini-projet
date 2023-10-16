@@ -137,7 +137,7 @@ class QuizCapitales:
             self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.quizcapitales.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
         else:
-            response = messagebox.showinfo("Time's up!", "Your time is up.")
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
             if response == "ok":
                 self.question_suivante() 
              
