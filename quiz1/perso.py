@@ -1,8 +1,11 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 from tkinter import StringVar
 from tkinter import messagebox
 import json
+from tkinter import *
+import PIL.Image
+
+from PIL import Image, ImageTk
 
 class Perso:
     def __init__(self, root):
@@ -16,6 +19,7 @@ class Perso:
         self.quizperso.title("Quiz personaliser")
         self.quizperso.geometry("800x500")
 
+        self.form_values =   {}
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
         photo_quiz = ImageTk.PhotoImage(img_quiz)
@@ -32,7 +36,7 @@ class Perso:
         button_frame.pack(expand=True)
 
         # Créez les boutons pour les différentes options
-        button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2)
+        button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2,command = self.displayForm)
         button1.pack(side="left", padx=20, pady=20)
 
         button2 = tk.Button(button_frame, text="Récuperer un quiz",width=20, height=2, command=self.importer_json)
@@ -148,3 +152,79 @@ class Perso:
 
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop()
+        
+    def displayForm(self):
+        q_frame = Frame(self.quizperso, padx=10, pady=10,bg='white',width=1000,height=1000)
+        q_frame.place(x=0, y=0)
+
+        form_lab = Label(q_frame, text="Question",font=("bold", 20),bg="white")  
+        form_lab.place(x=90,y=200)
+
+
+        question = StringVar
+        theme = Entry(q_frame,text="Question",textvariable = question)
+        theme.place(x=90,y=245,width=500,height=50)
+
+
+        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 20),bg="white")  
+        ans1_lab.place(x=90,y=300)
+
+
+        reponse1 = StringVar
+        ans1 = Entry(q_frame,text="Réponse 1",width=30,textvariable = reponse1)
+        ans1.place(x=90,y=345,width=500,height = 50)
+
+        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 20),bg="white")  
+        ans2_lab.place(x=90,y=400)
+
+        reponse2 = StringVar
+        ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
+        ans2.place(x=90,y=445,width=500,height = 50)
+
+        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 20),bg="white")  
+        ans3_lab.place(x=90,y=500)
+
+
+
+        reponse3 = StringVar
+        ans3 = Entry(q_frame,text="Réponse 3",width=30,textvariable = reponse3)
+        ans3.place(x=90,y=545,width=500,height = 50)
+
+        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 20),bg="white")  
+        ans4_lab.place(x=90,y=600)
+
+
+        reponse4 = StringVar
+        ans4 = Entry(q_frame,text="Réponse 4",width=30,textvariable = reponse4)
+        ans4.place(x=90,y=645,width=500,height = 50)
+
+        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 20),bg="white")  
+        ans5_lab.place(x=90,y=700)
+
+
+        reponse5 = StringVar
+        ans5 = Entry(q_frame,text="Réponse Correcte",width=30,textvariable = reponse5)
+        ans5.place(x=90,y=745,width=500,height = 50)
+
+
+        self.form_values['question'] = theme
+        self.form_values['ans1'] = ans1
+        self.form_values['ans2'] = ans2
+        self.form_values['ans3'] = ans3
+        self.form_values['ans4'] = ans4
+        self.form_values['ans5'] = ans5
+
+
+
+        submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.submit_quiz )
+        submit.place(x=90,y=815)
+        
+    def submit_quiz(self):
+        print('ok',self.form_values['question'].get(),
+              self.form_values['ans1'].get(),
+              self.form_values['ans2'].get(),
+              self.form_values['ans3'].get(),
+              self.form_values['ans4'].get(),
+              self.form_values['ans5'].get(),
+              )
+
