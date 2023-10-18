@@ -4,6 +4,8 @@ from tkinter import messagebox
 import json
 from tkinter import *
 import PIL.Image
+import os.path
+
 
 from PIL import Image, ImageTk
 
@@ -34,6 +36,7 @@ class Perso:
         # Créez un cadre (Frame) pour contenir les boutons et les centrer
         button_frame = tk.Frame(self.quizperso)
         button_frame.pack(expand=True)
+        
 
         # Créez les boutons pour les différentes options
         button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2,command = self.displayForm)
@@ -218,13 +221,33 @@ class Perso:
 
         submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.submit_quiz )
         submit.place(x=90,y=815)
-        
+    
+    
+    def quizFormIsCorrectlyFilled(self):
+        return True
+    
     def submit_quiz(self):
-        print('ok',self.form_values['question'].get(),
-              self.form_values['ans1'].get(),
-              self.form_values['ans2'].get(),
-              self.form_values['ans3'].get(),
-              self.form_values['ans4'].get(),
-              self.form_values['ans5'].get(),
-              )
-
+        
+        if self.quizFormIsCorrectlyFilled():
+            if os.path.isfile('./perso_quiz.json'):
+              with open('./perso_quiz.json','r') as file:
+                  file_data = json.load(file)
+                  
+              file_data["questions"].append(self.form_values['question'].get())
+              file_data["choix_reponses"].append(self.form_values['ans1'].get())
+              file_data["choix_reponses"].append(self.form_values['ans2'].get())
+              file_data["choix_reponses"].append(self.form_values['ans3'].get())
+              file_data["choix_reponses"].append(self.form_values['ans4'].get())
+              file_data["reponses"].append(self.form_values['ans5'].get())
+              
+              
+              with open('./perso_quiz.json','w') as file:
+                  json.dump(file_data,file)
+            else :
+                data = {
+                    "questions" : [self.form_values['question'].get()],
+                    "reponses" : [self.form_values['ans5'].get()],
+                    "choix_reponses" : [self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()]
+                    }
+                with open('./perso_quiz.json','w') as file:
+                    file.write(json.dumps(data))
