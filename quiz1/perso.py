@@ -259,10 +259,8 @@ class Perso:
                   file_data = json.load(file)
                   
               file_data["questions"].append(self.form_values['question'].get())
-              file_data["choix_reponses"].append(self.form_values['ans1'].get())
-              file_data["choix_reponses"].append(self.form_values['ans2'].get())
-              file_data["choix_reponses"].append(self.form_values['ans3'].get())
-              file_data["choix_reponses"].append(self.form_values['ans4'].get())
+              file_data["choix_reponses"].append([self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()])
+
               file_data["reponses"].append(self.form_values['ans5'].get())
               
               
@@ -272,7 +270,7 @@ class Perso:
                 data = {
                     "questions" : [self.form_values['question'].get()],
                     "reponses" : [self.form_values['ans5'].get()],
-                    "choix_reponses" : [self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()]
+                    "choix_reponses" : [[self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()]]
                     }
                 with open('./perso_quiz.json','w') as file:
                     file.write(json.dumps(data))
