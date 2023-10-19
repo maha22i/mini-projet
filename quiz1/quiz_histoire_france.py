@@ -2,12 +2,14 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import StringVar
 from tkinter import messagebox
+import json
 
 class QuizHistoire :
     def __init__(self, root):
         self.root = root
         self.current_question = 0
         self.score = 0             # Initialiser le score à 0
+        self.rep=False                 #Etat de réponse
 
         # Fermez la fenêtre des thèmes
         self.root.destroy()
@@ -15,7 +17,7 @@ class QuizHistoire :
         # Créez la fenêtre quiz_hsitoire
         self.quizhistoire = tk.Tk()
         self.quizhistoire.title("Quiz d'histoire de France")
-        self.quizhistoire.geometry("800x500")
+        self.quizhistoire.geometry("1200x700")
 
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
@@ -24,61 +26,22 @@ class QuizHistoire :
         background_label = tk.Label(self.quizhistoire, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        questions_histoire_france = [
-            "Qui était le roi de France pendant la Révolution française ?",
-            "Quelle célèbre bataille napoléonienne a eu lieu en 1815, marquant la fin de l'ère napoléonienne ?",
-            "Qui était le roi de France pendant la construction de la cathédrale de Notre-Dame de Paris ?",
-            "Quelle reine de France était la femme de Louis XVI ?",
-            "Quel traité a mis fin à la Guerre de Cent Ans entre la France et l'Angleterre en 1453 ?",
-            "Qui a dirigé le gouvernement provisoire de la France après la fin de la Seconde Guerre mondiale en 1945 ?",
-            "Quel roi de France est également connu sous le nom de Louis le Grand et a étendu les frontières de la France au XVIIe siècle ?",
-            "Qui a écrit le célèbre livre 'Les Trois Mousquetaires' qui se déroule en partie en France au XVIIe siècle ?",
-            "Quelle reine de France a été surnommée 'Madame Déficit' en raison de ses dépenses excessives ?",
-            "Quelle bataille de la Première Guerre mondiale a été témoin de l'utilisation de la toute première attaque de gaz toxique en 1915 ?",
-            "Quel empereur français est souvent associé au Code civil, également connu sous le nom de Code Napoléon ?",
-            "Quelle dynastie a régné sur la France pendant la majeure partie de la période médiévale ?",
-            "Quelle révolution sociale et politique a eu lieu en France en 1789, conduisant à la chute de la monarchie ?",
-            "Qui était le président de la France lors de l'abolition de la peine de mort en 1981 ?",
-            "Quelle célèbre bataille de la Première Guerre mondiale a vu l'utilisation massive de tanks par l'armée française en 1917 ?"
-        ]
-        reponses_histoire_france = [
-            "Louis XVI",
-            "La bataille de Waterloo",
-            "Louis VII",
-            "Marie-Antoinette",
-            "Le traité de Bordeaux",
-            "Charles de Gaulle",
-            "Louis XIV",
-            "Alexandre Dumas",
-            "Marie-Antoinette",
-            "La bataille de Ypres",
-            "Napoléon Bonaparte",
-            "La dynastie des Capétiens",
-            "La Révolution française",
-            "François Mitterrand",
-            "La bataille de Cambrai"
-        ]
-        choix_reponses_histoire_france = [
-            ["Louis XVI","Louis XV","Louis XI","Louis XIV"],
-            ["La bataille de Waterloo","La bataille de Poitier","La bataille de de Troyes","La bataille de 40 jours"],
-            ["Louis VII","Louis VIII","Louis XVI","Charlemagne"],
-            ["Marie-Antoinette","Marie-Therèse","Véronique","Marie-Helène"],
-            ["Le traité de Bordeaux","Le traité de Versailles","Le traité de Londres","Le traité de Genève"],
-            ["Charles de Gaulle","François Mitterrand","Jacques Chirac","Emmanuelle Macron"],
-            ["Louis XIV","Louis XVI","Louis XV","Louis XI"],
-            ["Alexandre Dumas","Voltaire","Baudelaire","Molière"],
-            ["Marie-Antoinette","Marie de Médicis","Jeanne de Valois","Clotilde"],
-            ["La bataille de Ypres","La bataille de la Somme","La bataille de Verdun","La bataille de Cambrai"],
-            ["Napoléon Bonaparte","Charlemagne","Clovis","Capet"],
-            ["La dynastie des Capétiens","La dynastie des Mérovingiens","La dynastie des Carolingiens","La dynastie des Bourbons"],
-            ["La Révolution française","La Révolution parisienne","La Révolution du Nord","La Révolution marseillaise"],
-            ["François Mitterrand","Jacques Chirac","François Hollande","Charles de Gaulle"],
-            ["La bataille de Cambrai","La bataille de Verdun","La bataille de la Marne","La bataille de la Somme"]
-        ]
+        #Ajout du timer
+        self.timer_seconds = 15  # Set the timer to 15 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
 
-        self.questions = questions_histoire_france
-        self.reponses = reponses_histoire_france
-        self.choix_reponses = choix_reponses_histoire_france
+        self.timer_label = tk.Label(self.quizhistoire, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()
+
+        #Lecture du fichier .json pour récuperer les données du quiz
+        with open('question_quiz.json', 'r', encoding='utf-8') as file: 
+            data = json.load(file)
+
+        self.questions = data["questions_histoire_france"]
+        self.reponses = data["reponses_histoire_france"]
+        self.choix_reponses = data["choix_reponses_histoire_france"]
 
 
         # Créez un label pour afficher la question
@@ -106,14 +69,37 @@ class QuizHistoire :
 
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
             self.radio_var.set(-1)  # Désélectionnez tous les boutons radio
             self.current_question += 1
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
         else:
             self.suivant_button.config(text="Terminer le quiz",command=self.terminer_quiz)
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
 
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizhistoire.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
+            if self.current_question < len(self.questions):
+                if response == "ok":
+                    self.question_suivante() 
+                    self.update_timer()
+            else :
+                if response == "ok":
+                    self.question_suivante()
+                    self.terminer_quiz()
 
     def verifier_reponse(self,choix):
         if self.current_question <= len(self.reponses):
@@ -121,10 +107,10 @@ class QuizHistoire :
                 reponse_utilisateur = self.choix_reponses[self.current_question - 1][choix]
                 reponse_correcte = self.reponses[self.current_question - 1]
                 if reponse_utilisateur.lower() == reponse_correcte.lower():
-                    self.score += 1
-            else:
-                messagebox.showerror("Sélectionnez une réponse", "Veuillez sélectionner une réponse.")
-    
+                    self.rep=True
+                else:
+                    self.rep=False
+                
     def terminer_quiz(self):
         #fermeture de la fenêtre du quiz
         self.quizhistoire.destroy()

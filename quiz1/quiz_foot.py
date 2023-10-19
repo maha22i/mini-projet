@@ -2,12 +2,14 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import StringVar
 from tkinter import messagebox
+import json
 
 class QuizFoot:
     def __init__(self, root):
         self.root = root
         self.current_question = 0
-        self.score = 0             # Initialiser le score à 0
+        self.score = 0              # Initialiser le score à 0
+        self.rep=False                 #Etat de réponse
 
         # Fermez la fenêtre des thèmes
         self.root.destroy()
@@ -15,7 +17,7 @@ class QuizFoot:
         # Créez la fenêtre quiz_foot
         self.quizfootball = tk.Tk()
         self.quizfootball.title("Quiz de football")
-        self.quizfootball.geometry("800x500")
+        self.quizfootball.geometry("1000x500")
 
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
@@ -23,66 +25,25 @@ class QuizFoot:
         # Créez un widget Label pour afficher l'image en arrière-plan
         background_label = tk.Label(self.quizfootball, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        #Ajout du timer
+        self.timer_seconds = 15  # Set the timer to 15 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+
+        self.timer_label = tk.Label(self.quizfootball, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()   
+
+        #Lecture du fichier .json pour récuperer les données du quiz
+        with open('question_quiz.json', 'r', encoding='utf-8') as file: 
+            data = json.load(file)
     
-        questions_football = [
-            "Qui est généralement considéré comme le meilleur joueur de football de tous les temps ?",
-            "Quelle équipe nationale a remporté le plus de Coupes du Monde de la FIFA ?",
-            "Qui est le meilleur buteur de tous les temps en Ligue des Champions de l'UEFA ?",
-            "Dans quelle ville se trouve le stade Santiago Bernabéu, qui abrite le Real Madrid ?",
-            "Qui est le capitaine actuel de l'équipe nationale de football du Brésil ?",
-            "Quel pays a remporté la dernière Copa America ?",
-            "Qui a remporté le Ballon d'Or en 2021 ?",
-            "Quel joueur de football est surnommé 'La Pulga' ?",
-            "Quelle équipe a remporté le plus de titres de la Premier League anglaise ?",
-            "Quel numéro à porter Neymar avec le Barça ?",
-            "Qui a remporté la Coupe d'Afrique des Nations (CAN) en 2019 ?",
-            "Quel joueur de football est connu sous le surnom 'CR7' ?",
-            "Qui est le manager actuel de l'équipe nationale d'Allemagne ?",
-            "Quel pays a remporté la médaille d'or en football masculin lors des Jeux Olympiques de Tokyo 2020 ?",
-            "Qui est le meilleur buteur de l'histoire de la Coupe du Monde de la FIFA ?"
-        ]
-        reponses_football = [
-            "Pelé",
-            "Brésil",
-            "Cristiano Ronaldo",
-            "Madrid",
-            "Casemiro",
-            "Argentine",
-            "Lionel Messi",
-            "Lionel Messi",
-            "Manchester United",
-            "11",
-            "Algérie",
-            "Cristiano Ronaldo",
-            "Joachim Löw",
-            "Brésil",
-            "Miroslav Klose"
-        ]
+        self.questions = data["questions_football"]
+        self.reponses = data["reponses_football"]
+        self.choix_reponses = data["choix_reponses_football"]
 
-        choix_reponses_football = [
-            ["Pelé","Neymar","Hakimi","Ziyech"],
-            ["Brésil","France","Italie","Argentine"],
-            ["Cristiano Ronaldo","Messi","Mbappe","Zidane"],
-            ["Madrid","Barcelone","Paris","Londres"],
-            ["Casemiro","Neymar","Silva","Marcelo"],
-            ["Argentine","Uruguay","Chili","Mexique"],
-            ["Lionel Messi","Cristiano Ronaldo","Neymar","Benzema"],
-            ["Lionel Messi","Haaland","Ozil","Veratti"],
-            ["Manchester United","Manchester City","Chelsea","Arsenal"],
-            ["11","10","9","7"],
-            ["Algérie","Maroc","Egypte","Sénégal"],
-            ["Cristiano Ronaldo","Cesar Raton","Charly Rompero","Carlos Rachel"],
-            ["Joachim Löw","Martin Luther","Boris Becker","Karl Lagerfeld"],
-            ["Brésil","France","Etats-Unis","Italie"],
-            ["Miroslav Klose","Cristiano Ronaldo","Lionel Messi","Diegp Maradona"]
-        ]
-
-        self.questions = questions_football
-        self.reponses = reponses_football
-        self.choix_reponses = choix_reponses_football
-
-
-        # Créez un label pour afficher la question
+         # Créez un label pour afficher la question
         self.question_label = tk.Label(self.quizfootball, text="", font=(20))
         self.question_label.pack(pady=10)
 
@@ -105,30 +66,50 @@ class QuizFoot:
         #Execution de la boucle pour la fenêtre du quiz du foot
         self.quizfootball.mainloop()
 
-
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
             self.radio_var.set(-1)  # Désélectionnez tous les boutons radio
             self.current_question += 1
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
         else:
             self.suivant_button.config(text="Terminer le quiz",command=self.terminer_quiz)
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
 
-
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizfootball.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
+            if self.current_question < len(self.questions):
+                if response == "ok":
+                    self.question_suivante() 
+                    self.update_timer()
+            else :
+                if response == "ok":
+                    self.question_suivante()
+                    self.terminer_quiz()
+        
     def verifier_reponse(self,choix):
         if self.current_question <= len(self.reponses):
             if choix != -1 :
                 reponse_utilisateur = self.choix_reponses[self.current_question - 1][choix]
                 reponse_correcte = self.reponses[self.current_question - 1]
                 if reponse_utilisateur.lower() == reponse_correcte.lower():
-                    self.score += 1
-            else:
-                messagebox.showerror("Sélectionnez une réponse", "Veuillez sélectionner une réponse.")
-
-    
-
+                    self.rep=True
+                else:
+                    self.rep=False
+            
     def terminer_quiz(self):
         #fermeture de la fenêtre du quiz
         self.quizfootball.destroy()
@@ -144,7 +125,7 @@ class QuizFoot:
         background_label = tk.Label(fenetre_res, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # Créez un label pour annoncer le résultat du quizz
+        # Créez un label pour annoncer le résultat du quiz
         label = tk.Label(fenetre_res, text="Voici votre résultat", font=(20))
         label.place(x=400,y=100,anchor="center")
 
@@ -162,4 +143,3 @@ class QuizFoot:
 
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop()
-
