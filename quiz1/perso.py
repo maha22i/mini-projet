@@ -3,16 +3,8 @@ from tkinter import StringVar
 from tkinter import messagebox
 import json
 from tkinter import *
-<<<<<<< HEAD
-import PIL.Image
-import os.path
-
-
-from PIL import Image, ImageTk
-=======
 from PIL import Image, ImageTk
 import os.path
->>>>>>> origin/badr
 
 class Perso:
     def __init__(self, root):
@@ -25,9 +17,8 @@ class Perso:
         # Créez la fenêtre quiz_foot
         self.quizperso = tk.Tk()
         self.quizperso.title("Quiz personaliser")
-        self.quizperso.geometry("800x500")
+        self.quizperso.geometry("1000x1000")
 
-        self.form_values =   {}
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
         photo_quiz = ImageTk.PhotoImage(img_quiz)
@@ -40,19 +31,14 @@ class Perso:
         label.pack(pady=10)
 
         # Créez un cadre (Frame) pour contenir les boutons et les centrer
-        button_frame = tk.Frame(self.quizperso)
-        button_frame.pack(expand=True)
-        
+        self.button_frame = tk.Frame(self.quizperso)
+        self.button_frame.pack(expand=True)
 
         # Créez les boutons pour les différentes options
-<<<<<<< HEAD
-        button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2,command = self.displayForm)
-=======
-        button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2, command = self.displayForm)
->>>>>>> origin/badr
+        button1 = tk.Button(self.button_frame, text="Nouveau Quiz",width=20, height=2, command = self.displayForm)
         button1.pack(side="left", padx=20, pady=20)
 
-        button2 = tk.Button(button_frame, text="Récuperer un quiz",width=20, height=2, command=self.creerFenetre)
+        button2 = tk.Button(self.button_frame, text="Récuperer un quiz",width=20, height=2, command=self.creerFenetre)
         button2.pack(side="left", padx=20, pady=20)
 
     def importer_json(self):
@@ -183,21 +169,14 @@ class Perso:
 
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop()
-<<<<<<< HEAD
-        
-=======
 
     
 
->>>>>>> origin/badr
     def displayForm(self):
-        q_frame = Frame(self.quizperso, padx=10, pady=10,bg='white',width=1000,height=1000)
-        q_frame.place(x=0, y=0)
+        self.button_frame.pack_forget()
+        q_frame = tk.Frame(self.quizperso,bg='white',width=1000,height=1000)
+        q_frame.pack(side = tk.TOP,fill=tk.BOTH,expand = True)
 
-<<<<<<< HEAD
-        form_lab = Label(q_frame, text="Question",font=("bold", 20),bg="white")  
-        form_lab.place(x=90,y=200)
-=======
         
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
@@ -206,95 +185,54 @@ class Perso:
         background_label = tk.Label(q_frame, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="white")  
-        form_lab.place(x=400,y=20,anchor="center")
->>>>>>> origin/badr
+        form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="lightgray")  
+        form_lab.place(x=400,y=10,anchor="center")
 
 
         question = StringVar
         theme = Entry(q_frame,text="Question",textvariable = question)
-<<<<<<< HEAD
-        theme.place(x=90,y=245,width=500,height=50)
+        theme.place(x=400,y=50,width=500,height=45,anchor="center")
 
 
-        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 20),bg="white")  
-        ans1_lab.place(x=90,y=300)
-=======
-        theme.place(x=400,y=50,width=500,anchor="center")
-
-
-        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 14),bg="white")  
+        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 14),bg="lightgray")  
         ans1_lab.place(x=400,y=100,anchor="center")
->>>>>>> origin/badr
 
 
         reponse1 = StringVar
         ans1 = Entry(q_frame,text="Réponse 1",width=30,textvariable = reponse1)
-<<<<<<< HEAD
-        ans1.place(x=90,y=345,width=500,height = 50)
+        ans1.place(x=400,y=150,width=500,height=45,anchor="center")
 
-        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 20),bg="white")  
-        ans2_lab.place(x=90,y=400)
-
-        reponse2 = StringVar
-        ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
-        ans2.place(x=90,y=445,width=500,height = 50)
-
-        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 20),bg="white")  
-        ans3_lab.place(x=90,y=500)
-=======
-        ans1.place(x=400,y=120,width=500,anchor="center")
-
-        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="white")  
-        ans2_lab.place(x=400,y=170,anchor="center")
+        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="lightgray")  
+        ans2_lab.place(x=400,y=200,anchor="center")
 
         reponse2 = StringVar
         ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
-        ans2.place(x=400,y=190,width=500,anchor="center")
+        ans2.place(x=400,y=250,width=500,height=45,anchor="center")
 
-        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="white")  
-        ans3_lab.place(x=400,y=240,anchor="center")
->>>>>>> origin/badr
+        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="lightgray")  
+        ans3_lab.place(x=400,y=300,anchor="center")
 
 
 
         reponse3 = StringVar
         ans3 = Entry(q_frame,text="Réponse 3",width=30,textvariable = reponse3)
-<<<<<<< HEAD
-        ans3.place(x=90,y=545,width=500,height = 50)
+        ans3.place(x=400,y=350,width=500,height=45,anchor="center")
 
-        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 20),bg="white")  
-        ans4_lab.place(x=90,y=600)
-=======
-        ans3.place(x=400,y=260,width=500,anchor="center")
-
-        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="white")  
-        ans4_lab.place(x=400,y=310,anchor="center")
->>>>>>> origin/badr
+        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="lightgray")  
+        ans4_lab.place(x=400,y=400,anchor="center")
 
 
         reponse4 = StringVar
         ans4 = Entry(q_frame,text="Réponse 4",width=30,textvariable = reponse4)
-<<<<<<< HEAD
-        ans4.place(x=90,y=645,width=500,height = 50)
+        ans4.place(x=400,y=450,width=500,height=45,anchor="center")
 
-        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 20),bg="white")  
-        ans5_lab.place(x=90,y=700)
-=======
-        ans4.place(x=400,y=330,width=500,anchor="center")
-
-        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="white")  
-        ans5_lab.place(x=400,y=380,anchor="center")
->>>>>>> origin/badr
+        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="lightgray")  
+        ans5_lab.place(x=400,y=500,anchor="center")
 
 
         reponse5 = StringVar
         ans5 = Entry(q_frame,text="Réponse Correcte",width=30,textvariable = reponse5)
-<<<<<<< HEAD
-        ans5.place(x=90,y=745,width=500,height = 50)
-=======
-        ans5.place(x=400,y=400,width=500,anchor="center")
->>>>>>> origin/badr
+        ans5.place(x=400,y=550,width=500,height=45,anchor="center")
 
 
         self.form_values['question'] = theme
@@ -307,11 +245,7 @@ class Perso:
 
 
         submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.submit_quiz )
-<<<<<<< HEAD
-        submit.place(x=90,y=815)
-=======
-        submit.pack(side=tk.BOTTOM, padx=10, pady=50)
->>>>>>> origin/badr
+        submit.place(x=300, y=600)
     
     
     def quizFormIsCorrectlyFilled(self):
@@ -342,3 +276,4 @@ class Perso:
                     }
                 with open('./perso_quiz.json','w') as file:
                     file.write(json.dumps(data))
+
