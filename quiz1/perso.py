@@ -5,6 +5,7 @@ import json
 from tkinter import *
 from PIL import Image, ImageTk
 import os.path
+from tkinter import filedialog
 
 class Perso:
     def __init__(self, root):
@@ -31,35 +32,42 @@ class Perso:
         label.pack(pady=10)
 
         # Créez un cadre (Frame) pour contenir les boutons et les centrer
-        button_frame = tk.Frame(self.quizperso)
-        button_frame.pack(expand=True)
+        self.button_frame = tk.Frame(self.quizperso)
+        self.button_frame.pack(expand=True)
 
         # Créez les boutons pour les différentes options
-        button1 = tk.Button(button_frame, text="Nouveau Quiz",width=20, height=2, command = self.displayForm)
+        button1 = tk.Button(self.button_frame, text="Nouveau Quiz",width=20, height=2, command = self.displayForm)
         button1.pack(side="left", padx=20, pady=20)
 
-        button2 = tk.Button(button_frame, text="Récuperer un quiz",width=20, height=2, command=self.creerFenetre)
+        button2 = tk.Button(self.button_frame, text="Récuperer un quiz",width=20, height=2, command=self.creerFenetre)
         button2.pack(side="left", padx=20, pady=20)
 
     def importer_json(self):
-        try:
+        #try:
             # Ouvrir une boîte de dialogue pour sélectionner un fichier JSON
-            json_file = tk.filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
+            json_file = filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
 
             if json_file:
                 with open(json_file, "r", encoding="utf-8") as file:
                     data = json.load(file)
-                    self.questions = data.get("questions", [])
-                    self.reponses = data.get("reponses", [])
-                    self.choix_reponses = data.get("choix_reponses", [])
+                    questions = data.get("questions",[])
+                    reponses = data.get("reponses",[])
+                    choix_reponses = data.get("choix_reponses",[])
 
-        except Exception as e:
-            messagebox.showerror("Erreur lors de l'importation", str(e))
+        #except Exception as e:
+            #messagebox.showerror("Erreur lors de l'importation", str(e))
 
-        return self.questions,self.reponses,self.choix_reponses
+            return questions,reponses,choix_reponses
 
     
     def creerFenetre(self ):
+        #Recuperation du quiz perso
+        questions, reponses, choix_reponses = self.importer_json()
+
+        self.questions = questions
+        self.reponses = reponses
+        self.choix_reponses = choix_reponses
+
         self.quizperso.destroy()
         
         self.current_question = 0
@@ -78,12 +86,14 @@ class Perso:
         background_label = tk.Label(self.quizchoix, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        #Recuperation du quiz perso
-        questions, reponses, choix_reponses = self.importer_json()
+        #Ajout du timer
+        self.timer_seconds = 15  # Set the timer to 15 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
 
-        self.questions = questions
-        self.reponses = reponses
-        self.choix_reponses = choix_reponses
+        self.timer_label = tk.Label(self.quizchoix, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()
 
         # Créez un label pour afficher la question
         self.question_label = tk.Label(self.quizchoix, text="", font=(20))
@@ -110,6 +120,8 @@ class Perso:
     
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
@@ -124,6 +136,21 @@ class Perso:
                 self.score+=1
                 self.rep=False
 
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizchoix.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
+            if self.current_question < len(self.questions):
+                if response == "ok":
+                    self.question_suivante() 
+                    self.update_timer()
+            else :
+                if response == "ok":
+                    self.question_suivante()
+                    self.terminer_quiz()
 
     def verifier_reponse(self,choix):
         if self.current_question <= len(self.reponses):
@@ -173,8 +200,9 @@ class Perso:
     
 
     def displayForm(self):
-        q_frame = Frame(self.quizperso, padx=10, pady=10,bg='white',width=1000,height=1000)
-        q_frame.place(x=0, y=0)
+        self.button_frame.pack_forget()
+        q_frame = tk.Frame(self.quizperso,bg='white',width=1000,height=1000)
+        q_frame.pack(side = tk.TOP,fill=tk.BOTH,expand = True)
 
         
         # Chargez l'image à afficher en arrière-plan
@@ -184,54 +212,54 @@ class Perso:
         background_label = tk.Label(q_frame, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="white")  
-        form_lab.place(x=400,y=20,anchor="center")
+        form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="lightgray")  
+        form_lab.place(x=400,y=10,anchor="center")
 
 
         question = StringVar
         theme = Entry(q_frame,text="Question",textvariable = question)
-        theme.place(x=400,y=50,width=500,anchor="center")
+        theme.place(x=400,y=50,width=500,height=45,anchor="center")
 
 
-        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 14),bg="white")  
+        ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 14),bg="lightgray")  
         ans1_lab.place(x=400,y=100,anchor="center")
 
 
         reponse1 = StringVar
         ans1 = Entry(q_frame,text="Réponse 1",width=30,textvariable = reponse1)
-        ans1.place(x=400,y=120,width=500,anchor="center")
+        ans1.place(x=400,y=150,width=500,height=45,anchor="center")
 
-        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="white")  
-        ans2_lab.place(x=400,y=170,anchor="center")
+        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="lightgray")  
+        ans2_lab.place(x=400,y=200,anchor="center")
 
         reponse2 = StringVar
         ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
-        ans2.place(x=400,y=190,width=500,anchor="center")
+        ans2.place(x=400,y=250,width=500,height=45,anchor="center")
 
-        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="white")  
-        ans3_lab.place(x=400,y=240,anchor="center")
+        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="lightgray")  
+        ans3_lab.place(x=400,y=300,anchor="center")
 
 
 
         reponse3 = StringVar
         ans3 = Entry(q_frame,text="Réponse 3",width=30,textvariable = reponse3)
-        ans3.place(x=400,y=260,width=500,anchor="center")
+        ans3.place(x=400,y=350,width=500,height=45,anchor="center")
 
-        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="white")  
-        ans4_lab.place(x=400,y=310,anchor="center")
+        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="lightgray")  
+        ans4_lab.place(x=400,y=400,anchor="center")
 
 
         reponse4 = StringVar
         ans4 = Entry(q_frame,text="Réponse 4",width=30,textvariable = reponse4)
-        ans4.place(x=400,y=330,width=500,anchor="center")
+        ans4.place(x=400,y=450,width=500,height=45,anchor="center")
 
-        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="white")  
-        ans5_lab.place(x=400,y=380,anchor="center")
+        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="lightgray")  
+        ans5_lab.place(x=400,y=500,anchor="center")
 
 
         reponse5 = StringVar
         ans5 = Entry(q_frame,text="Réponse Correcte",width=30,textvariable = reponse5)
-        ans5.place(x=400,y=400,width=500,anchor="center")
+        ans5.place(x=400,y=550,width=500,height=45,anchor="center")
 
 
         self.form_values['question'] = theme
@@ -244,7 +272,7 @@ class Perso:
 
 
         submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.submit_quiz )
-        submit.pack(side=tk.BOTTOM, padx=10, pady=50)
+        submit.place(x=300, y=600)
     
     
     def quizFormIsCorrectlyFilled(self):
@@ -258,10 +286,8 @@ class Perso:
                   file_data = json.load(file)
                   
               file_data["questions"].append(self.form_values['question'].get())
-              file_data["choix_reponses"].append(self.form_values['ans1'].get())
-              file_data["choix_reponses"].append(self.form_values['ans2'].get())
-              file_data["choix_reponses"].append(self.form_values['ans3'].get())
-              file_data["choix_reponses"].append(self.form_values['ans4'].get())
+              file_data["choix_reponses"].append([self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()])
+
               file_data["reponses"].append(self.form_values['ans5'].get())
               
               
@@ -271,7 +297,7 @@ class Perso:
                 data = {
                     "questions" : [self.form_values['question'].get()],
                     "reponses" : [self.form_values['ans5'].get()],
-                    "choix_reponses" : [self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()]
+                    "choix_reponses" : [[self.form_values['ans1'].get(),self.form_values['ans2'].get(),self.form_values['ans3'].get(),self.form_values['ans4'].get()]]
                     }
                 with open('./perso_quiz.json','w') as file:
                     file.write(json.dumps(data))
