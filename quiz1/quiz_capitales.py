@@ -2,12 +2,14 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import StringVar
 from tkinter import messagebox
+import json
 
 class QuizCapitales:
     def __init__(self,root):
         self.root = root
         self.current_question = 0
         self.score = 0             # Initialiser le score à 0
+        self.rep=False                 #Etat de réponse
 
         # Fermez la fenêtre des thèmes
         self.root.destroy()
@@ -24,62 +26,22 @@ class QuizCapitales:
         background_label = tk.Label(self.quizcapitales, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        questions_capitales=[
-            "Quelle est la capitale de la France ?",
-            "Quelle est la capitale de l'Espagne ?",
-            "Quelle est la capitale de l'Inde ?",
-            "Quelle est la capitale de l'Australie ?",
-            "Quelle est la capitale de l'Égypte ?",
-            "Quelle est la capitale de l'Argentine ?",
-            "Quelle est la capitale de la Suède ?",
-            "Quelle est la capitale de la Russie ?",
-            "Quelle est la capitale de la Turquie ?",
-            "Quelle est la capitale de l'Afrique du Sud ?",
-            "Quelle est la capitale du Canada ?",
-            "Quelle est la capitale de la Norvège ?",
-            "Quelle est la capitale du Kazakhstan ?",
-            "Quelle est la capitale du Vietnam ?",
-            "Quelle est la capitale du Luxembourg ?"
-        ]
-        reponses_capitales = [
-            "Paris",
-            "Madrid",
-            "New Delhi",
-            "Canberra",
-            "Le Caire",
-            "Buenos Aires",
-            "Stockholm",
-            "Moscou",
-            "Ankara",
-            "Pretoria",  # Afrique du Sud a plusieurs capitales
-            "Ottawa",
-            "Oslo",
-            "Noursoultan",  # Anciennement Astana
-            "Hanoï",
-            "Luxembourg"
-        ]
+        #Ajout du timer
+        self.timer_seconds = 15  # Set the timer to 15 seconds
+        self.timer_var = StringVar()
+        self.timer_var.set(f"Time: {self.timer_seconds} seconds")
 
-        choix_reponses_capitales = [
-            ["Paris","Marseille","Lyon","Nice"],
-            ["Madrid","Barcelone","Marbella","Séville"],
-            ["New Delhi","NewYork","Istanbul","Alger"],
-            ["Canberra","Berlin","Bogota","Dallas"],
-            ["Le Caire","Colombo","Toronto","Dublin"],
-            ["Buenos Aires","Manille","Oslo","Amsterdam"],
-            ["Stockholm","Vancouver","Lima","Lisbonne"],
-            ["Moscou","Marrakech","Prague","Rome"],
-            ["Ankara","Tokuo","Sydney","Mexico","Pekin"],
-            ["Pretoria","Lagos","Mumbai","Athènes"],  
-            ["Ottawa","Budapest","Tanger","Djibouti"],
-            ["Oslo","Shanghai","Chicago","Cancun"],
-            ["Noursoultan","Dubai","Jakarta","Téhéran"], 
-            ["Hanoï","Helsinki","Houston","Bangkok"],
-            ["Luxembourg","Rabat","Strasbourg","Valenciennes"]
-        ]
+        self.timer_label = tk.Label(self.quizcapitales, textvariable=self.timer_var)
+        self.timer_label.pack()
+        self.update_timer()   
 
-        self.questions = questions_capitales
-        self.reponses = reponses_capitales
-        self.choix_reponses = choix_reponses_capitales
+        #Lecture du fichier .json pour récuperer les données du quiz
+        with open('question_quiz.json', 'r', encoding='utf-8') as file: 
+            data = json.load(file)
+
+        self.questions = data["questions_capitales"]
+        self.reponses = data["reponses_capitales"]
+        self.choix_reponses = data["choix_reponses_capitales"]
 
         # Créez un label pour afficher la question
         self.question_label = tk.Label(self.quizcapitales, text="", font=(20))
@@ -106,15 +68,37 @@ class QuizCapitales:
 
     def question_suivante(self):
         if self.current_question < len(self.questions):
+            self.timer_seconds=15 # Call your custom function            
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
             self.question_label.config(text=self.questions[self.current_question])
             for i in range(4):
                 self.buttons[i].config(text=self.choix_reponses[self.current_question][i])
             self.radio_var.set(-1)  # Désélectionnez tous les boutons radio
             self.current_question += 1
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
         else:
             self.suivant_button.config(text="Terminer le quiz",command=self.terminer_quiz)
+            if self.rep==True:
+                self.score+=1
+                self.rep=False
 
-
+    def update_timer(self):
+        if self.timer_seconds > 0:
+            self.timer_seconds -= 1
+            self.timer_var.set(f"Time: {self.timer_seconds} seconds")
+            self.quizcapitales.after(1000, self.update_timer)  # Call update_timer after 1000 ms (1 second)
+        else:
+            response = messagebox.showinfo("Time's up!", "Temps écoulé !")
+            if self.current_question < len(self.questions):
+                if response == "ok":
+                    self.question_suivante() 
+                    self.update_timer()
+            else :
+                if response == "ok":
+                    self.question_suivante()
+                    self.terminer_quiz()
 
     def verifier_reponse(self,choix):
         if self.current_question <= len(self.reponses):
@@ -122,10 +106,10 @@ class QuizCapitales:
                 reponse_utilisateur = self.choix_reponses[self.current_question - 1][choix]
                 reponse_correcte = self.reponses[self.current_question - 1]
                 if reponse_utilisateur.lower() == reponse_correcte.lower():
-                    self.score += 1
-            else:
-                messagebox.showerror("Sélectionnez une réponse", "Veuillez sélectionner une réponse.")
-    
+                    self.rep=True
+                else:
+                    self.rep=False
+            
     def terminer_quiz(self):
         #fermeture de la fenêtre du quiz
         self.quizcapitales.destroy()
@@ -141,9 +125,10 @@ class QuizCapitales:
         background_label = tk.Label(fenetre_res, image=photo_quiz)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # Créez un label pour annoncer le résultat du quizz
+        # Créez un label pour annoncer le résultat du quiz
         label = tk.Label(fenetre_res, text="Voici votre résultat", font=(20))
         label.place(x=400,y=100,anchor="center")
+        
         #Annoncer le résulat
         label1 = tk.Label(fenetre_res, text="Vous avez obtenu "+str(self.score)+" point(s) à ce quiz.", font=(20))
         label1.place(x=400,y=200,anchor="center")

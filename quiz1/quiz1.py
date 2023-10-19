@@ -1,7 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
-import quiz1
 from quiz_foot import QuizFoot
 from quiz_capitales import QuizCapitales
 from quiz_animaux import QuizAnimaux
