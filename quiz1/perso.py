@@ -18,7 +18,7 @@ class Perso:
         # Créez la fenêtre quiz_foot
         self.quizperso = tk.Tk()
         self.quizperso.title("Quiz personaliser")
-        self.quizperso.geometry("800x500")
+        self.quizperso.geometry("800x700")
 
         # Chargez l'image à afficher en arrière-plan
         img_quiz=Image.open('fond_ecran_quiz.gif')
@@ -214,8 +214,6 @@ class Perso:
 
         form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="lightgray")  
         form_lab.place(x=400,y=10,anchor="center")
-
-
         question = StringVar
         theme = Entry(q_frame,text="Question",textvariable = question)
         theme.place(x=400,y=50,width=500,height=45,anchor="center")
@@ -223,40 +221,30 @@ class Perso:
 
         ans1_lab = Label(q_frame, text="Réponse 1",font=("bold", 14),bg="lightgray")  
         ans1_lab.place(x=400,y=100,anchor="center")
-
-
         reponse1 = StringVar
         ans1 = Entry(q_frame,text="Réponse 1",width=30,textvariable = reponse1)
         ans1.place(x=400,y=150,width=500,height=45,anchor="center")
 
         ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="lightgray")  
         ans2_lab.place(x=400,y=200,anchor="center")
-
         reponse2 = StringVar
         ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
         ans2.place(x=400,y=250,width=500,height=45,anchor="center")
 
         ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="lightgray")  
         ans3_lab.place(x=400,y=300,anchor="center")
-
-
-
         reponse3 = StringVar
         ans3 = Entry(q_frame,text="Réponse 3",width=30,textvariable = reponse3)
         ans3.place(x=400,y=350,width=500,height=45,anchor="center")
 
         ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="lightgray")  
         ans4_lab.place(x=400,y=400,anchor="center")
-
-
         reponse4 = StringVar
         ans4 = Entry(q_frame,text="Réponse 4",width=30,textvariable = reponse4)
         ans4.place(x=400,y=450,width=500,height=45,anchor="center")
 
         ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="lightgray")  
         ans5_lab.place(x=400,y=500,anchor="center")
-
-
         reponse5 = StringVar
         ans5 = Entry(q_frame,text="Réponse Correcte",width=30,textvariable = reponse5)
         ans5.place(x=400,y=550,width=500,height=45,anchor="center")
@@ -272,7 +260,10 @@ class Perso:
 
 
         submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.submit_quiz )
-        submit.place(x=300, y=600)
+        submit.place(x=200, y=600)
+
+        startMyQuiz = tk.Button(q_frame,text="Commencer",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = self.creerFenetre )
+        startMyQuiz.place(x=400, y=600)
     
     
     def quizFormIsCorrectlyFilled(self):
