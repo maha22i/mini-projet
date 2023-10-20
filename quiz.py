@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import StringVar
+from tkinter import *
 
 root = tk.Tk()
-root.geometry('500x500')
+root.geometry('1000x1000')
 
 questions = ["Combien de piliers de l'islam y a-t-il ?",
              "Quel pays est souvent appelé la perle de l'Afrique de l'Est en raison de ses paysages impressionnants ?",
@@ -66,6 +67,59 @@ option4 = tk.Radiobutton(frame, bg="#fff", variable=v4, font=('Verdana', 20),
 
 button_next = tk.Button(frame, text='Next',bg='Orange', font=('Verdana', 20), 
                         command = lambda : displayNextQuestion())
+
+
+def submit_quiz():
+    print('ok')
+
+def add_quiz_frame():
+    q_frame = Frame(root, padx=10, pady=10,bg='white',width=1000,height=1000)
+    q_frame.place(x=0, y=0)
+    
+    form_lab = Label(q_frame, text="Question",width=20,font=("bold", 20),bg="white")  
+    form_lab.place(x=90,y=50)
+
+    theme = Entry(q_frame)
+    theme.place(x=90,y=100,width=500,height=50)
+    
+    
+    ans1_lab = Label(q_frame, text="Réponse 1",width=20,font=("bold", 20),bg="white")  
+    ans1_lab.place(x=90,y=150)
+
+    ans1 = Entry(q_frame,text="Thème",width=30,)
+    ans1.place(x=90,y=200,width=500,height = 50)
+    
+    ans2_lab = Label(q_frame, text="Réponse 2",width=20,font=("bold", 20),bg="white")  
+    ans2_lab.place(x=90,y=250)
+
+    ans2 = Entry(q_frame,text="Thème",width=30,)
+    ans2.place(x=90,y=300,width=500,height = 50)
+    
+    ans3_lab = Label(q_frame, text="Réponse 3",width=20,font=("bold", 20),bg="white")  
+    ans3_lab.place(x=90,y=350)
+
+    ans3 = Entry(q_frame,text="Thème",width=30,)
+    ans3.place(x=90,y=400,width=500,height = 50)
+    
+    ans4_lab = Label(q_frame, text="Réponse 4",width=20,font=("bold", 20),bg="white")  
+    ans4_lab.place(x=90,y=450)
+
+    ans4 = Entry(q_frame,text="Réponse 4",width=30,)
+    ans4.place(x=90,y=500,width=500,height = 50)
+    
+    ans5_lab = Label(q_frame, text="Réponse Correcte",width=20,font=("bold", 20),bg="white")  
+    ans5_lab.place(x=90,y=550)
+
+    ans5 = Entry(q_frame,text="Thème",width=30,)
+    ans5.place(x=90,y=600,width=500,height = 50)
+    
+    submit = tk.Button(q_frame,text="Ajouter",font=('Verdana',20),bg="skyblue",fg="white",command = submit_quiz)
+    submit.place(x=90,y=750) 
+
+add_quiz = tk.Button(frame,text="Ajouter une question",font=('Verdana',20),command = add_quiz_frame)
+add_quiz.place(x=500,y=150)
+
+
 
 frame.pack(fill="both", expand="true")
 question_label.grid(row=0, column=0)

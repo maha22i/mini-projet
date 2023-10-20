@@ -214,6 +214,8 @@ class Perso:
 
         form_lab = Label(q_frame, text="Question",font=("bold", 14),bg="lightgray")  
         form_lab.place(x=400,y=10,anchor="center")
+
+
         question = StringVar
         theme = Entry(q_frame,text="Question",textvariable = question)
         theme.place(x=400,y=50,width=500,height=45,anchor="center")
@@ -227,9 +229,17 @@ class Perso:
 
         ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="lightgray")  
         ans2_lab.place(x=400,y=200,anchor="center")
+
+        ans2_lab = Label(q_frame, text="Réponse 2",font=("bold", 14),bg="lightgray")  
+        ans2_lab.place(x=400,y=200,anchor="center")
         reponse2 = StringVar
         ans2 = Entry(q_frame,text="Réponse 2",width=30,textvariable = reponse2)
         ans2.place(x=400,y=250,width=500,height=45,anchor="center")
+
+        ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="lightgray")  
+        ans3_lab.place(x=400,y=300,anchor="center")
+
+
 
         ans3_lab = Label(q_frame, text="Réponse 3",font=("bold", 14),bg="lightgray")  
         ans3_lab.place(x=400,y=300,anchor="center")
@@ -239,9 +249,17 @@ class Perso:
 
         ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="lightgray")  
         ans4_lab.place(x=400,y=400,anchor="center")
+
+
+        ans4_lab = Label(q_frame, text="Réponse 4",font=("bold", 14),bg="lightgray")  
+        ans4_lab.place(x=400,y=400,anchor="center")
         reponse4 = StringVar
         ans4 = Entry(q_frame,text="Réponse 4",width=30,textvariable = reponse4)
         ans4.place(x=400,y=450,width=500,height=45,anchor="center")
+
+        ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="lightgray")  
+        ans5_lab.place(x=400,y=500,anchor="center")
+
 
         ans5_lab = Label(q_frame, text="Réponse Correcte",font=("bold", 14),bg="lightgray")  
         ans5_lab.place(x=400,y=500,anchor="center")
@@ -292,3 +310,4 @@ class Perso:
                     }
                 with open('./perso_quiz.json','w') as file:
                     file.write(json.dumps(data))
+
