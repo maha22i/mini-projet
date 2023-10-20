@@ -23,7 +23,7 @@ background_label = tk.Label(root, image=photo_acceuil)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 # Créez le titre en haut et centre
-bienvenu_label = tk.Label(root, text="Bienvenu sur MrQuiz !", font=(20))
+bienvenu_label = tk.Label(root, text="Bienvenue sur MrQuiz !", font=(20))
 bienvenu_label.pack(side=tk.TOP, pady=10)  # Placez le titre en haut avec un espacement en bas
 
 # Fonction pour le choix du theme du quiz

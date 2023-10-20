@@ -141,5 +141,11 @@ class QuizFoot:
             label2 = tk.Label(fenetre_res, text="Bravo ! Vous êtes bien présent dans l'univers du football !!", font=(20))
             label2.place(x=400,y=300,anchor="center")
 
+        redo = tk.Button(fenetre_res,text="Choisir un quiz",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1)#,command = quiz1.afficher_fenetre_quiz 
+        redo.place(x=200, y=600)
+
+        quit = tk.Button(fenetre_res,text="Quitter",font=('Verdana',20),bg="skyblue",fg="white",width=10,height=1,command = fenetre_res.quit)
+        quit.place(x=400, y=600)
+
         #Execution de la boucle pour la fenêtre des résultats
         fenetre_res.mainloop()

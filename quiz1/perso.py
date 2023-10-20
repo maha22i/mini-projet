@@ -30,6 +30,8 @@ class Perso:
         # Créez un label pour afficher un titre d'information
         label = tk.Label(self.quizperso, text="Faites un choix !!", font=(20))
         label.pack(pady=10)
+        labelbis = tk.Label(self.quizperso, text="Choisir le fichier perso_quiz.json !!", font=(20))
+        labelbis.pack(pady=10)
 
         # Créez un cadre (Frame) pour contenir les boutons et les centrer
         self.button_frame = tk.Frame(self.quizperso)
